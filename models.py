@@ -28,4 +28,23 @@ class About(Document):
 class AboutCrude(BaseModel):
     explain: str
     technologies: list
+
+
 # end for about
+
+# start for experience
+class Experience(Document):
+    organization = StringField()
+    role = StringField()
+    joinDate = StringField()
+    lastDate = StringField()
+    notes = StringField()
+
+
+class ExperienceCrude(BaseModel):
+    organization: str
+    role: str
+    joinDate: str
+    lastDate: str
+    notes: str
+# end for experience

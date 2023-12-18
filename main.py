@@ -1,7 +1,10 @@
 import json
+
+from bson import ObjectId
 from fastapi import FastAPI
-from models import Intro, IntroCrude, About, AboutCrude
+from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude
 from mongoengine import connect
+from mongoengine.queryset.visitor import Q
 
 app = FastAPI()
 connect(db='soton_portfolio', host='localhost', port=27017)
@@ -29,8 +32,8 @@ async def add_intro(new_intro: IntroCrude):
     except Exception as e:
         print(f'Failed to add intro: {e}')
         return {
-            'status': True,
-            'message': 'Intro add successfully'}
+            'status': False,
+            'message': 'Failed to add intro'}
 
 
 @app.get('/get_intro')
@@ -90,8 +93,8 @@ async def add_about(new_about: AboutCrude):
     except Exception as e:
         print(f'Failed to add about: {e}')
         return {
-            'status': True,
-            'message': 'About add successfully'}
+            'status': False,
+            'message': 'Failed to add about'}
 
 
 @app.get('/get_about')
@@ -130,4 +133,45 @@ async def update_about(about_data: AboutCrude):
             "message": "Failed to update about",
         }
 
+
 # end for about
+
+# start for experience
+@app.post('/add_experince')
+async def add_experience(new_experience: ExperienceCrude):
+    try:
+        experience = Experience(
+            organization=new_experience.organization,
+            role=new_experience.role,
+            joinDate=new_experience.joinDate,
+            lastDate=new_experience.lastDate,
+            notes=new_experience.notes
+        )
+        experience.save()
+        return {
+            'status': True,
+            'message': 'Experience add successfully'}
+    except Exception as e:
+        print(f'Failed to add experience: {e}')
+        return {
+            'status': False,
+            'message': 'Failed to add experience'}
+
+
+@app.get('/get_experiences')
+async def get_experiences():
+    try:
+        experiences_json = json.loads(Experience.objects().to_json())
+        return {
+            "status": True,
+            "message": "Fetch experiences successfully",
+            "data": experiences_json}
+    except Exception as e:
+        print(f"Failed to fetch experiences e: {e}")
+        return {
+            "status": False,
+            "message": "Failed to fetch experiences",
+            "data": None}
+
+
+# end for experience
