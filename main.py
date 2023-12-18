@@ -1,6 +1,6 @@
 import json
 from fastapi import FastAPI
-from models import Intro, IntroCrude
+from models import Intro, IntroCrude, About, AboutCrude
 from mongoengine import connect
 
 app = FastAPI()
@@ -71,4 +71,63 @@ async def update_intro(intro_data: IntroCrude):
             "message": "Failed to update intro",
         }
 
+
 # end for intro
+
+
+# start for about
+@app.post('/add_about')
+async def add_about(new_about: AboutCrude):
+    try:
+        about = About(
+            explain=new_about.explain,
+            technologies=new_about.technologies
+        )
+        about.save()
+        return {
+            'status': True,
+            'message': 'About add successfully'}
+    except Exception as e:
+        print(f'Failed to add about: {e}')
+        return {
+            'status': True,
+            'message': 'About add successfully'}
+
+
+@app.get('/get_about')
+async def get_about():
+    try:
+        about_json = json.loads(About.objects.first().to_json())
+        return {
+            "status": True,
+            "message": "Fetch about successfully",
+            "data": about_json}
+    except Exception as e:
+        print(f"Failed to fetch about e: {e}")
+        return {
+            "status": False,
+            "message": "Failed to fetch about",
+            "data": None}
+
+
+@app.patch("/update_about")
+async def update_about(about_data: AboutCrude):
+    try:
+        about = About.objects.first()
+        about.update(
+            explain=about_data.explain,
+            technologies=about_data.technologies
+        )
+        about.save()
+        return {
+            "status": True,
+            "message": "About updated successfully",
+        }
+    except Exception as e:
+        print(f"Failed to update about: {e}")
+        return {
+            "status": False,
+            "message": "Failed to update about",
+        }
+
+# end for about

@@ -1,7 +1,8 @@
-from mongoengine import Document, StringField
+from mongoengine import Document, StringField, ListField
 from pydantic import BaseModel
 
 
+# start for intro
 class Intro(Document):
     introOfName = StringField()
     name = StringField()
@@ -14,3 +15,17 @@ class IntroCrude(BaseModel):
     name: str
     whoAreYou: str
     shortBio: str
+
+
+# end for intro
+
+# start for about
+class About(Document):
+    explain = StringField()
+    technologies = ListField()
+
+
+class AboutCrude(BaseModel):
+    explain: str
+    technologies: list
+# end for about
