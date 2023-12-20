@@ -2,9 +2,9 @@ import json
 
 from bson import ObjectId
 from fastapi import FastAPI
-from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude
 from mongoengine import connect
-from mongoengine.queryset.visitor import Q
+
+from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude
 
 app = FastAPI()
 connect(db='soton_portfolio', host='localhost', port=27017)
@@ -174,4 +174,24 @@ async def get_experiences():
             "data": None}
 
 
+@app.put('/update_experience/{_id}')
+async def update_experience(_id: str, updated_experience: ExperienceCrude):
+    try:
+        _id = ObjectId(_id)
+
+        updated_fields = {
+            key: value for key, value in updated_experience.model_dump().items() if value is not None
+        }
+        Experience.objects(_id=_id).update_one(**updated_fields)
+        return {
+            'status': True,
+            'message': 'Experience updated successfully'
+        }
+
+    except Exception as e:
+        print(f'Failed to update experience: {e}')
+        return {
+            'status': False,
+            'message': 'Failed to update experience'
+        }
 # end for experience

@@ -1,4 +1,6 @@
-from mongoengine import Document, StringField, ListField
+from typing import Optional
+
+from mongoengine import Document, StringField, ListField, ObjectIdField
 from pydantic import BaseModel
 
 
@@ -34,6 +36,7 @@ class AboutCrude(BaseModel):
 
 # start for experience
 class Experience(Document):
+    _id = ObjectIdField()
     organization = StringField()
     role = StringField()
     joinDate = StringField()
@@ -47,4 +50,26 @@ class ExperienceCrude(BaseModel):
     joinDate: str
     lastDate: str
     notes: str
+
+
 # end for experience
+
+# start for work
+class Work(Document):
+    _id = ObjectIdField()
+    softwareName = StringField()
+    summary = StringField()
+    websiteUrl = StringField(default=None)
+    appStore = StringField(default=None)
+    playStore = StringField(default=None)
+    imgUrl = StringField(default=None)
+
+
+class WorkCrude(BaseModel):
+    softwareName: str
+    summary: str
+    websiteUrl: Optional[str] = None
+    appStore: Optional[str] = None
+    playStore: Optional[str] = None
+    imgUrl: Optional[str] = None
+# end for work
