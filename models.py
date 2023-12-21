@@ -73,3 +73,27 @@ class WorkCrude(BaseModel):
     playStore: Optional[str] = None
     imgUrl: Optional[str] = None
 # end for work
+
+
+# end for contact
+
+class Contact(Document):
+    explain = StringField()
+    email = StringField()
+    github = StringField(default=None)
+    linkedIn = StringField(default=None)
+    stackoverflow = StringField(default=None)
+    facebook = StringField(default=None)
+    instagram = StringField(default=None)
+
+
+class ContactCrude(BaseModel):
+    explain: str
+    email: str
+    github: Optional[str] = None
+    linkedIn: Optional[str] = None
+    stackoverflow: Optional[str] = None
+    facebook: Optional[str] = None
+    instagram: Optional[str] = None
+
+# end for contact

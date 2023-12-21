@@ -4,7 +4,8 @@ from bson import ObjectId
 from fastapi import FastAPI
 from mongoengine import connect
 
-from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude
+from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude, Work, WorkCrude, Contact, \
+    ContactCrude
 
 app = FastAPI()
 connect(db='soton_portfolio', host='localhost', port=27017)
@@ -27,12 +28,12 @@ async def add_intro(new_intro: IntroCrude):
         )
         intro.save()
         return {
-            'status': True,
+            'isSuccess': True,
             'message': 'Intro add successfully'}
     except Exception as e:
         print(f'Failed to add intro: {e}')
         return {
-            'status': False,
+            'isSuccess': False,
             'message': 'Failed to add intro'}
 
 
@@ -41,13 +42,13 @@ async def get_intro():
     try:
         intro_json = json.loads(Intro.objects.first().to_json())
         return {
-            "status": True,
+            "isSuccess": True,
             "message": "Fetch intro successfully",
             "data": intro_json}
     except Exception as e:
         print(f"Failed to fetch into e: {e}")
         return {
-            "status": False,
+            "isSuccess": False,
             "message": "Failed to fetch intro",
             "data": None}
 
@@ -64,13 +65,13 @@ async def update_intro(intro_data: IntroCrude):
         )
         intro.save()
         return {
-            "status": True,
+            "isSuccess": True,
             "message": "Intro updated successfully",
         }
     except Exception as e:
         print(f"Failed to update intro: {e}")
         return {
-            "status": False,
+            "isSuccess": False,
             "message": "Failed to update intro",
         }
 
@@ -88,12 +89,12 @@ async def add_about(new_about: AboutCrude):
         )
         about.save()
         return {
-            'status': True,
+            'isSuccess': True,
             'message': 'About add successfully'}
     except Exception as e:
         print(f'Failed to add about: {e}')
         return {
-            'status': False,
+            'isSuccess': False,
             'message': 'Failed to add about'}
 
 
@@ -102,13 +103,13 @@ async def get_about():
     try:
         about_json = json.loads(About.objects.first().to_json())
         return {
-            "status": True,
+            "isSuccess": True,
             "message": "Fetch about successfully",
             "data": about_json}
     except Exception as e:
         print(f"Failed to fetch about e: {e}")
         return {
-            "status": False,
+            "isSuccess": False,
             "message": "Failed to fetch about",
             "data": None}
 
@@ -123,13 +124,13 @@ async def update_about(about_data: AboutCrude):
         )
         about.save()
         return {
-            "status": True,
+            "isSuccess": True,
             "message": "About updated successfully",
         }
     except Exception as e:
         print(f"Failed to update about: {e}")
         return {
-            "status": False,
+            "isSuccess": False,
             "message": "Failed to update about",
         }
 
@@ -149,12 +150,12 @@ async def add_experience(new_experience: ExperienceCrude):
         )
         experience.save()
         return {
-            'status': True,
+            'isSuccess': True,
             'message': 'Experience add successfully'}
     except Exception as e:
         print(f'Failed to add experience: {e}')
         return {
-            'status': False,
+            'isSuccess': False,
             'message': 'Failed to add experience'}
 
 
@@ -163,13 +164,13 @@ async def get_experiences():
     try:
         experiences_json = json.loads(Experience.objects().to_json())
         return {
-            "status": True,
+            "isSuccess": True,
             "message": "Fetch experiences successfully",
             "data": experiences_json}
     except Exception as e:
         print(f"Failed to fetch experiences e: {e}")
         return {
-            "status": False,
+            "isSuccess": False,
             "message": "Failed to fetch experiences",
             "data": None}
 
@@ -184,14 +185,127 @@ async def update_experience(_id: str, updated_experience: ExperienceCrude):
         }
         Experience.objects(_id=_id).update_one(**updated_fields)
         return {
-            'status': True,
+            'isSuccess': True,
             'message': 'Experience updated successfully'
         }
 
     except Exception as e:
         print(f'Failed to update experience: {e}')
         return {
-            'status': False,
+            'isSuccess': False,
             'message': 'Failed to update experience'
         }
+
+
 # end for experience
+
+
+# start work
+
+@app.post('/add_work')
+async def add_work(new_work: WorkCrude):
+    try:
+        work = Work(**new_work.model_dump())
+        work.save()
+        return {
+            'isSuccess': True,
+            'message': 'Work add successfully'}
+    except Exception as e:
+        print(f'Failed to add Work: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to add Work'}
+
+
+@app.get('/get_work')
+async def get_work():
+    try:
+        work_json = json.loads(Work.objects().to_json())
+        return {
+            "isSuccess": True,
+            "message": "Fetch work successfully",
+            "data": work_json}
+    except Exception as e:
+        print(f"Failed to fetch work e: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to fetch work",
+            "data": None}
+
+
+@app.put('/update_work/{_id}')
+async def update_work(_id: str, updated_work: WorkCrude):
+    try:
+        _id = ObjectId(_id)
+
+        updated_fields = {
+            key: value for key, value in updated_work.model_dump().items() if value is not None
+        }
+        Work.objects(_id=_id).update_one(**updated_fields)
+        return {
+            'isSuccess': True,
+            'message': 'Work updated successfully'
+        }
+
+    except Exception as e:
+        print(f'Failed to update work: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to update work'
+        }
+
+
+# end work
+
+
+# start contact
+
+@app.post('/add_contact')
+async def add_contact(new_contact: ContactCrude):
+    try:
+        contact = Contact(**new_contact.model_dump())
+        contact.save()
+        return {
+            'isSuccess': True,
+            'message': 'Contact add successfully'}
+    except Exception as e:
+        print(f'Failed to add contact: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to add contact'}
+
+
+@app.get('/get_contact')
+async def get_contact():
+    try:
+        contact_json = json.loads(Contact.objects.first().to_json())
+        return {
+            "isSuccess": True,
+            "message": "Fetch contact successfully",
+            "data": contact_json}
+    except Exception as e:
+        print(f"Failed to fetch contact e: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to fetch contact",
+            "data": None}
+
+
+@app.patch("/update_contact")
+async def update_contact(about_contact: ContactCrude):
+    try:
+        contact = Contact.objects.first()
+        contact.update(**about_contact.model_dump())
+        contact.save()
+        return {
+            "isSuccess": True,
+            "message": "Contact updated successfully",
+        }
+    except Exception as e:
+        print(f"Failed to update contact: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to update contact",
+        }
+
+# end contact
