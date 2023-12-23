@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from mongoengine import connect
 
 from models import Intro, IntroCrude, About, AboutCrude, Experience, ExperienceCrude, Work, WorkCrude, Contact, \
-    ContactCrude
+    ContactCrude, Footer, FooterCrude
 
 app = FastAPI()
 connect(db='soton_portfolio', host='localhost', port=27017)
@@ -308,4 +308,57 @@ async def update_contact(about_contact: ContactCrude):
             "message": "Failed to update contact",
         }
 
+
 # end contact
+
+# start footer
+
+@app.post('/add_footer')
+async def add_footer(new_footer: FooterCrude):
+    try:
+        footer = Footer(**new_footer.model_dump())
+        footer.save()
+        return {
+            'isSuccess': True,
+            'message': 'Footer add successfully'}
+    except Exception as e:
+        print(f'Failed to add footer: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to add footer'}
+
+
+@app.get('/get_footer')
+async def get_footer():
+    try:
+        footer_json = json.loads(Footer.objects.first().to_json())
+        return {
+            "isSuccess": True,
+            "message": "Fetch footer successfully",
+            "data": footer_json}
+    except Exception as e:
+        print(f"Failed to fetch footer e: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to fetch footer",
+            "data": None}
+
+
+@app.patch("/update_footer")
+async def update_footer(new_footer: FooterCrude):
+    try:
+        footer = Footer.objects.first()
+        footer.update(**new_footer.model_dump())
+        footer.save()
+        return {
+            "isSuccess": True,
+            "message": "Footer updated successfully",
+        }
+    except Exception as e:
+        print(f"Failed to update footer: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to update footer",
+        }
+
+# end footer

@@ -72,6 +72,8 @@ class WorkCrude(BaseModel):
     appStore: Optional[str] = None
     playStore: Optional[str] = None
     imgUrl: Optional[str] = None
+
+
 # end for work
 
 
@@ -96,4 +98,16 @@ class ContactCrude(BaseModel):
     facebook: Optional[str] = None
     instagram: Optional[str] = None
 
+
 # end for contact
+
+# end for Footer
+
+class Footer(Document):
+    developBy = StringField()
+
+
+class FooterCrude(BaseModel):
+    developBy: str
+
+# end for Footer
