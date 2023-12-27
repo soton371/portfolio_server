@@ -20,12 +20,6 @@ async def read_root():
 @app.post('/add_intro')
 async def add_intro(new_intro: IntroCrude):
     try:
-        # intro = Intro(
-        #     introOfName=new_intro.introOfName,
-        #     name=new_intro.name,
-        #     whoAreYou=new_intro.whoAreYou,
-        #     shortBio=new_intro.shortBio
-        # )
         intro = Intro(**new_intro.model_dump())
         intro.save()
         return {
@@ -58,12 +52,6 @@ async def get_intro():
 async def update_intro(intro_data: IntroCrude):
     try:
         intro = Intro.objects.first()
-        # intro.update(
-        #     introOfName=intro_data.introOfName,
-        #     name=intro_data.name,
-        #     whoAreYou=intro_data.whoAreYou,
-        #     shortBio=intro_data.shortBio,
-        # )
         intro.update(**intro_data.model_dump())
         intro.save()
         return {
@@ -101,10 +89,6 @@ async def delete_intro():
 @app.post('/add_about')
 async def add_about(new_about: AboutCrude):
     try:
-        # about = About(
-        #     explain=new_about.explain,
-        #     technologies=new_about.technologies
-        # )
         about = About(**new_about.model_dump())
         about.save()
         return {
@@ -137,10 +121,6 @@ async def get_about():
 async def update_about(about_data: AboutCrude):
     try:
         about = About.objects.first()
-        # about.update(
-        #     explain=about_data.explain,
-        #     technologies=about_data.technologies
-        # )
         about.update(**about_data.model_dump())
         about.save()
         return {
@@ -170,19 +150,13 @@ async def delete_about():
             "message": "Failed to delete about",
         }
 
+
 # end for about
 
 # start for experience
-@app.post('/add_experince')
+@app.post('/add_experience')
 async def add_experience(new_experience: ExperienceCrude):
     try:
-        # experience = Experience(
-        #     organization=new_experience.organization,
-        #     role=new_experience.role,
-        #     joinDate=new_experience.joinDate,
-        #     lastDate=new_experience.lastDate,
-        #     notes=new_experience.notes
-        # )
         experience = Experience(**new_experience.model_dump())
         experience.save()
         return {
