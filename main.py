@@ -20,12 +20,13 @@ async def read_root():
 @app.post('/add_intro')
 async def add_intro(new_intro: IntroCrude):
     try:
-        intro = Intro(
-            introOfName=new_intro.introOfName,
-            name=new_intro.name,
-            whoAreYou=new_intro.whoAreYou,
-            shortBio=new_intro.shortBio
-        )
+        # intro = Intro(
+        #     introOfName=new_intro.introOfName,
+        #     name=new_intro.name,
+        #     whoAreYou=new_intro.whoAreYou,
+        #     shortBio=new_intro.shortBio
+        # )
+        intro = Intro(**new_intro.model_dump())
         intro.save()
         return {
             'isSuccess': True,
@@ -57,12 +58,13 @@ async def get_intro():
 async def update_intro(intro_data: IntroCrude):
     try:
         intro = Intro.objects.first()
-        intro.update(
-            introOfName=intro_data.introOfName,
-            name=intro_data.name,
-            whoAreYou=intro_data.whoAreYou,
-            shortBio=intro_data.shortBio,
-        )
+        # intro.update(
+        #     introOfName=intro_data.introOfName,
+        #     name=intro_data.name,
+        #     whoAreYou=intro_data.whoAreYou,
+        #     shortBio=intro_data.shortBio,
+        # )
+        intro.update(**intro_data.model_dump())
         intro.save()
         return {
             "isSuccess": True,
@@ -76,6 +78,22 @@ async def update_intro(intro_data: IntroCrude):
         }
 
 
+@app.delete("/delete_intro")
+async def delete_intro():
+    try:
+        Intro.objects.all().delete()
+        return {
+            "isSuccess": True,
+            "message": "Intro delete successfully",
+        }
+    except Exception as e:
+        print(f"Failed to delete intro: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to delete intro",
+        }
+
+
 # end for intro
 
 
@@ -83,10 +101,11 @@ async def update_intro(intro_data: IntroCrude):
 @app.post('/add_about')
 async def add_about(new_about: AboutCrude):
     try:
-        about = About(
-            explain=new_about.explain,
-            technologies=new_about.technologies
-        )
+        # about = About(
+        #     explain=new_about.explain,
+        #     technologies=new_about.technologies
+        # )
+        about = About(**new_about.model_dump())
         about.save()
         return {
             'isSuccess': True,
@@ -118,10 +137,11 @@ async def get_about():
 async def update_about(about_data: AboutCrude):
     try:
         about = About.objects.first()
-        about.update(
-            explain=about_data.explain,
-            technologies=about_data.technologies
-        )
+        # about.update(
+        #     explain=about_data.explain,
+        #     technologies=about_data.technologies
+        # )
+        about.update(**about_data.model_dump())
         about.save()
         return {
             "isSuccess": True,
@@ -135,19 +155,35 @@ async def update_about(about_data: AboutCrude):
         }
 
 
+@app.delete("/delete_about")
+async def delete_about():
+    try:
+        About.objects.all().delete()
+        return {
+            "isSuccess": True,
+            "message": "About delete successfully",
+        }
+    except Exception as e:
+        print(f"Failed to delete about: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to delete about",
+        }
+
 # end for about
 
 # start for experience
 @app.post('/add_experince')
 async def add_experience(new_experience: ExperienceCrude):
     try:
-        experience = Experience(
-            organization=new_experience.organization,
-            role=new_experience.role,
-            joinDate=new_experience.joinDate,
-            lastDate=new_experience.lastDate,
-            notes=new_experience.notes
-        )
+        # experience = Experience(
+        #     organization=new_experience.organization,
+        #     role=new_experience.role,
+        #     joinDate=new_experience.joinDate,
+        #     lastDate=new_experience.lastDate,
+        #     notes=new_experience.notes
+        # )
+        experience = Experience(**new_experience.model_dump())
         experience.save()
         return {
             'isSuccess': True,
@@ -309,6 +345,22 @@ async def update_contact(about_contact: ContactCrude):
         }
 
 
+@app.delete("/delete_contact")
+async def delete_contact():
+    try:
+        Contact.objects.all().delete()
+        return {
+            "isSuccess": True,
+            "message": "Contact delete successfully",
+        }
+    except Exception as e:
+        print(f"Failed to delete contact: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to delete contact",
+        }
+
+
 # end contact
 
 # start footer
@@ -361,4 +413,19 @@ async def update_footer(new_footer: FooterCrude):
             "message": "Failed to update footer",
         }
 
+
+@app.delete("/delete_footer")
+async def delete_footer():
+    try:
+        Footer.objects.all().delete()
+        return {
+            "isSuccess": True,
+            "message": "Footer delete successfully",
+        }
+    except Exception as e:
+        print(f"Failed to delete footer: {e}")
+        return {
+            "isSuccess": False,
+            "message": "Failed to delete footer",
+        }
 # end footer
