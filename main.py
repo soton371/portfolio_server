@@ -207,6 +207,23 @@ async def update_experience(_id: str, updated_experience: ExperienceCrude):
         }
 
 
+@app.delete("/delete_experience/{_id}")
+async def delete_experience(_id: str):
+    try:
+        _id = ObjectId(_id)
+        Experience.objects(_id=_id).delete()
+        return {
+            'isSuccess': True,
+            'message': 'Experience delete successfully'
+        }
+    except Exception as e:
+        print(f'Failed to delete experience: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to delete experience'
+        }
+
+
 # end for experience
 
 
@@ -262,6 +279,23 @@ async def update_work(_id: str, updated_work: WorkCrude):
         return {
             'isSuccess': False,
             'message': 'Failed to update work'
+        }
+
+
+@app.delete('/delete_work/{_id}')
+async def delete_work(_id: str):
+    try:
+        _id = ObjectId(_id)
+        Work.objects(_id=_id).delete()
+        return {
+            'isSuccess': True,
+            'message': 'Work delete successfully'
+        }
+    except Exception as e:
+        print(f'Failed to delete work: {e}')
+        return {
+            'isSuccess': False,
+            'message': 'Failed to delete work'
         }
 
 
