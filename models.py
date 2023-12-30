@@ -1,5 +1,4 @@
 from typing import Optional
-
 from mongoengine import Document, StringField, ListField, ObjectIdField
 from pydantic import BaseModel
 
@@ -25,11 +24,13 @@ class IntroCrude(BaseModel):
 class About(Document):
     explain = StringField()
     technologies = ListField()
+    image = StringField()
 
 
 class AboutCrude(BaseModel):
     explain: str
     technologies: list
+    image: str
 
 
 # end for about
